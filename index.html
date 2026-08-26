@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snowflake Simulator</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❄️</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="card">
+    <header class="header">
+      <div class="header-info">
+        <h1>❄️ Snowflake Simulator</h1>
+        <p class="subtitle">Discover how bits combine in real time to generate a unique 64-bit identifier.</p>
+      </div>
+      <div class="theme-switcher" role="radiogroup" aria-label="Theme selection">
+        <button type="button" class="theme-btn" data-theme-value="light" title="Light mode" aria-label="Light mode">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+        <button type="button" class="theme-btn" data-theme-value="dark" title="Dark mode" aria-label="Dark mode">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button type="button" class="theme-btn" data-theme-value="system" title="System mode" aria-label="System mode">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+    
+    <div class="controls">
+      <!-- Row 1: Epoch & Timestamp Grid -->
+      <div class="time-row">
+        <!-- Epoch Configuration with Presets -->
+        <div class="input-group epoch-group">
+          <div class="label-row">
+            <label for="epoch">Epoch (Initial Date - ms)</label>
+            <div class="epoch-presets" role="group" aria-label="Epoch presets">
+              <button type="button" class="preset-btn active" data-epoch="1288834974657">Twitter</button>
+              <button type="button" class="preset-btn" data-epoch="1420070400000">Discord</button>
+              <button type="button" class="preset-btn" data-epoch="0">Unix</button>
+            </div>
+          </div>
+          <input type="number" id="epoch" value="1288834974657" min="0">
+          <div class="date-preview" id="epoch-preview">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 14 14"></polyline>
+            </svg>
+            <span id="readable-epoch">Loading epoch...</span>
+          </div>
+        </div>
+
+        <!-- Timestamp Input with Now button and Readable Date -->
+        <div class="input-group timestamp-group">
+          <div class="label-row">
+            <label for="timestamp">Timestamp (ms since epoch)</label>
+            <button type="button" id="btn-now" class="now-btn" title="Set to current timestamp">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 14 16 14"></polyline>
+              </svg>
+              <span>Set to Now</span>
+            </button>
+          </div>
+          <input type="number" id="timestamp" min="0">
+          <div class="date-preview" id="date-preview">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span id="readable-date">Loading date...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Sliders Grid -->
+      <div class="sliders-row">
+        <div class="input-group">
+          <div class="label-row">
+            <label for="worker">Worker ID (max 1023)</label>
+            <span class="value-badge worker-badge" id="worker-value">42</span>
+          </div>
+          <input type="range" id="worker" value="42" min="0" max="1023">
+        </div>
+        <div class="input-group">
+          <div class="label-row">
+            <label for="sequence">Sequence (max 4095)</label>
+            <span class="value-badge seq-badge" id="sequence-value">7</span>
+          </div>
+          <input type="range" id="sequence" value="7" min="0" max="4095">
+        </div>
+      </div>
+    </div>
+
+    <div class="visualization">
+      <div class="bits-grid" id="bits-container">
+        <!-- Bits are rendered via JS -->
+      </div>
+      
+      <div class="legend">
+        <div class="legend-item"><div class="dot" style="background: var(--sign)"></div>Sign (1 bit)</div>
+        <div class="legend-item"><div class="dot" style="background: var(--time)"></div>Timestamp (41 bits)</div>
+        <div class="legend-item"><div class="dot" style="background: var(--worker)"></div>Worker (10 bits)</div>
+        <div class="legend-item"><div class="dot" style="background: var(--seq)"></div>Sequence (12 bits)</div>
+      </div>
+    </div>
+
+    <div class="result-panel">
+      <div class="result-header">
+        <label for="final-id" class="result-label">Generated Final ID (Decimal)</label>
+        <button type="button" id="btn-copy" class="copy-btn" title="Copy to clipboard">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span id="copy-text">Copy</span>
+        </button>
+      </div>
+      <div class="final-id-container">
+        <input type="text" id="final-id" class="final-id-input" inputmode="numeric" placeholder="0" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="decode-hint">
+        <span>💡 Edit or paste any decimal ID above to decode it in real time</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

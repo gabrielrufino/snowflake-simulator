@@ -1,0 +1,23 @@
+{
+  "name": "@gabrielrufino/snowflake-simulator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "homepage": "https://github.com/gabrielrufino/snowflake-simulator#readme",
+  "bugs": {
+    "url": "https://github.com/gabrielrufino/snowflake-simulator/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielrufino/snowflake-simulator.git"
+  },
+  "license": "UNLICENSED",
+  "author": "Gabriel Rufino",
+  "scripts": {
+    "start": "serve .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "serve": "^14.2.6"
+  }
+}
