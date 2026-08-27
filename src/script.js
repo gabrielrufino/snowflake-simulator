@@ -100,6 +100,13 @@ function updateBitStructureUI() {
     const isValid = totalBits === 64;
     totalBitsBadge.classList.toggle('valid', isValid);
     totalBitsBadge.classList.toggle('invalid', !isValid);
+
+    if (tsInput) tsInput.disabled = !isValid;
+    if (btnNow) btnNow.disabled = !isValid;
+    if (finalIdInput) finalIdInput.disabled = !isValid;
+    if (btnCopy) btnCopy.disabled = !isValid;
+    if (epochInput) epochInput.disabled = !isValid;
+    epochPresetButtons.forEach(btn => btn.disabled = !isValid);
   }
 
   renderAllocationBar(barAllocationEl, limits, workerSegments);
@@ -143,6 +150,10 @@ function renderSlidersComponent() {
       updateSimulator();
     }
   });
+
+  const isValid = limits.totalBits === 64;
+  const sliders = slidersContainer.querySelectorAll('input[type="range"]');
+  sliders.forEach(slider => slider.disabled = !isValid);
 }
 
 function updateSimulator() {
