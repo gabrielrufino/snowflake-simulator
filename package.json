@@ -2,6 +2,7 @@
   "name": "@gabrielrufino/snowflake-simulator",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "",
   "homepage": "https://github.com/gabrielrufino/snowflake-simulator#readme",
   "bugs": {
@@ -15,9 +16,10 @@
   "author": "Gabriel Rufino",
   "scripts": {
     "start": "serve .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run"
   },
   "devDependencies": {
-    "serve": "^14.2.6"
+    "serve": "^14.2.6",
+    "vitest": "^4.1.11"
   }
 }

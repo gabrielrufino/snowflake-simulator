@@ -1,0 +1,25 @@
+# Snowflake Simulator
+
+> An interactive web-based simulator and visualizer for Snowflake IDs (time-sorted 64-bit unique identifiers).
+
+## What are Snowflake IDs?
+Snowflake IDs are 64-bit unsigned integers originally created by Twitter to provide distributed, sortable unique identifiers at high scale without coordination. A standard Snowflake ID consists of:
+1. **Sign bit:** Always 0 (to maintain positive numbers in signed 64-bit integers).
+2. **Timestamp:** Milliseconds since a specific custom Epoch.
+3. **Worker ID:** Identifies the machine/process generating the ID (often split into Datacenter and Worker/Process IDs).
+4. **Sequence:** An incrementing number to prevent collisions when generating multiple IDs in the exact same millisecond.
+
+## Tool Overview
+This tool allows developers to understand and simulate Snowflake IDs with highly customizable parameters. 
+It operates entirely in the browser using modern JavaScript (ES Modules).
+
+## Key Features
+- **Customizable Layout:** Users can define how the 64 bits are split (e.g., 41 bits for time, 10 bits for workers, 12 bits for sequence).
+- **Dynamic Segments:** The worker segment can be subdivided dynamically (e.g., 5 bits for datacenter, 5 bits for node).
+- **Epoch Selection:** Comes with built-in presets (Twitter Epoch: 2010-11-04, Discord Epoch: 2015-01-01, Unix Epoch: 1970-01-01) and accepts custom epochs.
+- **URL Synchronization:** Settings are synced with the URL query parameters (`?id=...&epoch=...&layout=...`) for shareability.
+- **Decoding & Encoding:** Enter an existing ID to see its exact composition, or tweak parameters to generate a new ID.
+- **Open Source:** Written in vanilla JS with Vite/Vitest for unit testing.
+
+## GitHub Repository
+https://github.com/gabrielrufino/snowflake-simulator

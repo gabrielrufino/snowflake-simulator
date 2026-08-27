@@ -5,7 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Snowflake Simulator</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❄️</text></svg>">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="src/style.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JWRR6TF9K2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-JWRR6TF9K2');
+  </script>
 </head>
 <body>
   <div class="card">
@@ -14,34 +24,117 @@
         <h1>❄️ Snowflake Simulator</h1>
         <p class="subtitle">Discover how bits combine in real time to generate a unique 64-bit identifier.</p>
       </div>
-      <div class="theme-switcher" role="radiogroup" aria-label="Theme selection">
-        <button type="button" class="theme-btn" data-theme-value="light" title="Light mode" aria-label="Light mode">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      <div class="header-actions">
+        <a href="https://github.com/gabrielrufino/snowflake-simulator" target="_blank" rel="noopener noreferrer" class="github-link" title="View repository on GitHub" aria-label="GitHub Repository">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
           </svg>
-        </button>
-        <button type="button" class="theme-btn" data-theme-value="dark" title="Dark mode" aria-label="Dark mode">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </button>
-        <button type="button" class="theme-btn" data-theme-value="system" title="System mode" aria-label="System mode">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
-        </button>
+        </a>
+        <div class="theme-switcher" role="radiogroup" aria-label="Theme selection">
+          <button type="button" class="theme-btn" data-theme-value="light" title="Light mode" aria-label="Light mode">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+          <button type="button" class="theme-btn" data-theme-value="dark" title="Dark mode" aria-label="Dark mode">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+          <button type="button" class="theme-btn" data-theme-value="system" title="System mode" aria-label="System mode">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
+
+    <!-- Bit Allocation Configuration Section (Collapsible) -->
+    <div class="config-section" id="config-section">
+      <button type="button" class="config-header" id="config-toggle" aria-expanded="false" aria-controls="config-body">
+        <div class="config-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Bits layout</span>
+          <span class="config-summary" id="config-summary">41 / 10 / 12 bits</span>
+        </div>
+        <div class="config-header-right">
+          <span class="config-status-badge valid" id="total-bits-badge">64 / 64 bits</span>
+          <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+      </button>
+
+      <div class="config-body" id="config-body">
+        <div class="bit-inputs-grid">
+          <!-- Timestamp Item -->
+          <div class="bit-input-item">
+            <div class="bit-label-row">
+              <label for="bits-ts">Timestamp</label>
+              <span class="bit-capacity" id="ts-capacity">41 bits</span>
+            </div>
+            <div class="bit-input-wrapper">
+              <input type="number" id="bits-ts" min="1" max="55" value="41">
+              <span class="bit-unit">bits</span>
+            </div>
+            <span class="bit-hint" id="ts-lifespan-hint">~69.7 years lifespan</span>
+          </div>
+
+          <!-- Sequence Item -->
+          <div class="bit-input-item">
+            <div class="bit-label-row">
+              <label for="bits-seq">Sequence</label>
+              <span class="bit-capacity" id="seq-capacity">12 bits</span>
+            </div>
+            <div class="bit-input-wrapper">
+              <input type="number" id="bits-seq" min="0" max="32" value="12">
+              <span class="bit-unit">bits</span>
+            </div>
+            <span class="bit-hint" id="seq-capacity-hint">4,096 IDs/ms (0–4095)</span>
+          </div>
+        </div>
+
+        <!-- Worker Segments Section -->
+        <div class="worker-segments-section">
+          <div class="worker-segments-header">
+            <div class="worker-segments-title">
+              <span class="segments-title-text">Worker segments</span>
+              <span class="bit-capacity" id="worker-total-capacity">10 bits total</span>
+            </div>
+          </div>
+
+          <div class="worker-segments-list" id="worker-segments-list">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <button type="button" class="btn-add-segment" id="btn-add-segment" title="Add new worker segment">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Add segment</span>
+          </button>
+        </div>
+
+        <div class="bit-allocation-bar" id="bit-allocation-bar" title="Visual allocation of 64 bits">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+    </div>
     
     <div class="controls">
       <!-- Row 1: Epoch & Timestamp Grid -->
@@ -49,14 +142,14 @@
         <!-- Epoch Configuration with Presets -->
         <div class="input-group epoch-group">
           <div class="label-row">
-            <label for="epoch">Epoch (Initial Date - ms)</label>
+            <label for="epoch">Epoch (Initial Date)</label>
             <div class="epoch-presets" role="group" aria-label="Epoch presets">
-              <button type="button" class="preset-btn active" data-epoch="1288834974657">Twitter</button>
-              <button type="button" class="preset-btn" data-epoch="1420070400000">Discord</button>
-              <button type="button" class="preset-btn" data-epoch="0">Unix</button>
+              <button type="button" class="preset-btn active" data-date="2010-11-04">Twitter</button>
+              <button type="button" class="preset-btn" data-date="2015-01-01">Discord</button>
+              <button type="button" class="preset-btn" data-date="1970-01-01">Unix</button>
             </div>
           </div>
-          <input type="number" id="epoch" value="1288834974657" min="0">
+          <input type="date" id="epoch" value="2010-11-04">
           <div class="date-preview" id="epoch-preview">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
@@ -91,22 +184,9 @@
         </div>
       </div>
 
-      <!-- Row 2: Sliders Grid -->
-      <div class="sliders-row">
-        <div class="input-group">
-          <div class="label-row">
-            <label for="worker">Worker ID (max 1023)</label>
-            <span class="value-badge worker-badge" id="worker-value">42</span>
-          </div>
-          <input type="range" id="worker" value="42" min="0" max="1023">
-        </div>
-        <div class="input-group">
-          <div class="label-row">
-            <label for="sequence">Sequence (max 4095)</label>
-            <span class="value-badge seq-badge" id="sequence-value">7</span>
-          </div>
-          <input type="range" id="sequence" value="7" min="0" max="4095">
-        </div>
+      <!-- Row 2: Dynamic Sliders Grid (Worker Segments + Sequence) -->
+      <div class="sliders-row" id="sliders-container">
+        <!-- Dynamically populated via JS -->
       </div>
     </div>
 
@@ -115,11 +195,8 @@
         <!-- Bits are rendered via JS -->
       </div>
       
-      <div class="legend">
-        <div class="legend-item"><div class="dot" style="background: var(--sign)"></div>Sign (1 bit)</div>
-        <div class="legend-item"><div class="dot" style="background: var(--time)"></div>Timestamp (41 bits)</div>
-        <div class="legend-item"><div class="dot" style="background: var(--worker)"></div>Worker (10 bits)</div>
-        <div class="legend-item"><div class="dot" style="background: var(--seq)"></div>Sequence (12 bits)</div>
+      <div class="legend" id="legend-container">
+        <!-- Legend items rendered via JS -->
       </div>
     </div>
 
@@ -143,6 +220,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module" src="src/script.js"></script>
 </body>
 </html>
