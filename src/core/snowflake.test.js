@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { calculateLimits, encodeSnowflake, decodeSnowflake } from './snowflake.js';
+import { vi } from 'vitest';
+import { calculateLimits, encodeSnowflake, decodeSnowflake, randomizeSnowflake } from './snowflake.js';
 
 /**
  * Helper: creates a minimal worker segment for testing.
@@ -80,6 +81,49 @@ describe('calculateLimits', () => {
     const limits = calculateLimits(41, 12, workers);
     expect(limits.workerTotalBits).toBe(0);
     expect(workers[0].mask).toBe(0n);
+  });
+});
+
+describe('randomizeSnowflake', () => {
+  it('should randomize ts, seq, and worker segment values within their limits', () => {
+    const workers = [makeSegment('A', 5), makeSegment('B', 10)];
+    const limits = calculateLimits(41, 12, workers);
+
+    // We mock Math.random so that high & low are predictable
+    // First random gives high, second gives low
+
+    // Spy and return values that would result in max values
+    let callCount = 0;
+    const randomSpy = vi.spyOn(Math, 'random').mockImplementation(() => {
+      callCount++;
+      return 0.9999999999;
+    });
+
+    const result = randomizeSnowflake({ limits, workerSegments: workers });
+
+    // The logic is random64 % (maxVal + 1n), so the remainder will be maxVal if the random value is large enough
+    // It should be within bounds and the mock ensures we test bounds
+    expect(result.ts).toBeLessThanOrEqual(limits.maxTs);
+    expect(result.seq).toBeLessThanOrEqual(limits.maxSeq);
+    expect(workers[0].value).toBeLessThanOrEqual(workers[0].mask);
+    expect(workers[1].value).toBeLessThanOrEqual(workers[1].mask);
+
+    // Ensure the returned seq and ts are correct according to the limits
+    // Since random64 % (max + 1) -> we know it won't exceed max. We also test for lower bound.
+    expect(result.ts).toBeGreaterThanOrEqual(0n);
+    expect(result.seq).toBeGreaterThanOrEqual(0n);
+
+    randomSpy.mockRestore();
+  });
+
+  it('should handle maxVal of 0 gracefully', () => {
+    const workers = [makeSegment('A', 0)];
+    const limits = calculateLimits(41, 0, workers);
+
+    const result = randomizeSnowflake({ limits, workerSegments: workers });
+
+    expect(result.seq).toBe(0n);
+    expect(workers[0].value).toBe(0n);
   });
 });
 

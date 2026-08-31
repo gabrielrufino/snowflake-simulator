@@ -1,6 +1,6 @@
 import { initTheme } from './state/theme.js';
 import { formatTimestampDate, getEpochMs, formatEpochPreview, formatLifespan } from './utils/formatters.js';
-import { calculateLimits, encodeSnowflake, decodeSnowflake } from './core/snowflake.js';
+import { calculateLimits, encodeSnowflake, decodeSnowflake, randomizeSnowflake } from './core/snowflake.js';
 import { syncURLParams, loadFromURLParams } from './state/url.js';
 import {
   initBitGrid,
@@ -55,6 +55,7 @@ const bitsContainer = document.getElementById('bits-container');
 const legendContainer = document.getElementById('legend-container');
 
 const finalIdInput = document.getElementById('final-id');
+const btnRandomize = document.getElementById('btn-randomize');
 const btnCopy = document.getElementById('btn-copy');
 const copyText = document.getElementById('copy-text');
 
@@ -105,6 +106,7 @@ function updateBitStructureUI() {
     if (btnNow) btnNow.disabled = !isValid;
     if (finalIdInput) finalIdInput.disabled = !isValid;
     if (btnCopy) btnCopy.disabled = !isValid;
+    if (btnRandomize) btnRandomize.disabled = !isValid;
     if (epochInput) epochInput.disabled = !isValid;
     epochPresetButtons.forEach(btn => btn.disabled = !isValid);
   }
@@ -291,6 +293,20 @@ if (btnNow) {
     const { maxTs } = getLimits();
     if (offset > maxTs) offset = maxTs;
     tsInput.value = offset.toString();
+    updateSimulator();
+  });
+}
+
+if (btnRandomize) {
+  btnRandomize.addEventListener('click', () => {
+    const limits = getLimits();
+    const result = randomizeSnowflake({ limits, workerSegments });
+
+    tsInput.value = result.ts.toString();
+    seqValue = result.seq;
+
+    // We need to re-render the sliders since seqValue and workerSegments values have changed
+    renderSlidersComponent();
     updateSimulator();
   });
 }
