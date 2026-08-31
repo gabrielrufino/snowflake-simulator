@@ -67,3 +67,29 @@ export function decodeSnowflake({ id, limits, workerSegments }) {
 
   return { ts, seq };
 }
+
+/**
+ * Randomizes the snowflake components (timestamp, worker segments, and sequence)
+ * based on the limits.
+ */
+export function randomizeSnowflake({ limits, workerSegments }) {
+  // Generate random BigInts within bounds
+  const randomBigInt = (maxVal) => {
+    if (maxVal === 0n) return 0n;
+    // Math.random() gives 53 bits of precision which is enough for our max values
+    // since we limit tsBits to 55 max, but we can combine two randoms for up to 64 bits just in case
+    const high = BigInt(Math.floor(Math.random() * 0x100000000));
+    const low = BigInt(Math.floor(Math.random() * 0x100000000));
+    const random64 = (high << 32n) | low;
+    return random64 % (maxVal + 1n);
+  };
+
+  const ts = randomBigInt(limits.maxTs);
+  const seq = randomBigInt(limits.maxSeq);
+
+  workerSegments.forEach(seg => {
+    seg.value = randomBigInt(seg.mask);
+  });
+
+  return { ts, seq };
+}

@@ -203,13 +203,25 @@
     <div class="result-panel">
       <div class="result-header">
         <label for="final-id" class="result-label">Generated Final ID (Decimal)</label>
-        <button type="button" id="btn-copy" class="copy-btn" title="Copy to clipboard">
-          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span id="copy-text">Copy</span>
-        </button>
+        <div class="result-actions">
+          <button type="button" id="btn-randomize" class="action-btn" title="Randomize ID">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 3h5v5"></path>
+              <path d="M4 20L21 3"></path>
+              <path d="M21 16v5h-5"></path>
+              <path d="M15 15l6 6"></path>
+              <path d="M4 4l5 5"></path>
+            </svg>
+            <span>Randomize</span>
+          </button>
+          <button type="button" id="btn-copy" class="action-btn" title="Copy to clipboard">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="copy-text">Copy</span>
+          </button>
+        </div>
       </div>
       <div class="final-id-container">
         <input type="text" id="final-id" class="final-id-input" inputmode="numeric" placeholder="0" spellcheck="false" autocomplete="off">
