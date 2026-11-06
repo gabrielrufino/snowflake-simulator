@@ -1,17 +1,22 @@
 :root {
   color-scheme: light;
   scrollbar-gutter: stable;
-  /* Bit colors */
-  --sign: #64748b; /* Gray */
-  --time: #3b82f6; /* Blue */
-  --worker: #10b981; /* Green */
-  --seq: #f59e0b; /* Yellow */
+  /* Bit colors: fills carry white text, so they stay at 4.5:1 or better */
+  --bit-sign: #475569; /* Slate */
+  --bit-time: #1d4ed8; /* Blue */
+  --bit-seq: #b45309; /* Amber */
+
+  /* Accent colors for text, icons, and thumbs on light surfaces */
+  --time: #1d4ed8;
+  --worker: #047857;
+  --seq: #b45309;
+  --danger: #b91c1c;
 
   /* Light theme variables (default) */
   --page-bg: #e2e8f0;
   --card-bg: #ffffff;
   --text: #0f172a;
-  --text-muted: #64748b;
+  --text-muted: #556377;
   --text-title: #1e293b;
   --label-color: #475569;
   --input-bg: #ffffff;
@@ -33,6 +38,12 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
+  --bit-sign: #64748b;
+  --bit-time: #3b82f6;
+  --time: #60a5fa;
+  --worker: #34d399;
+  --seq: #fbbf24;
+  --danger: #f87171;
   --page-bg: #0b0f19;
   --card-bg: #151d2e;
   --text: #f8fafc;
@@ -259,13 +270,13 @@ p.subtitle {
 
 .config-status-badge.valid {
   background: rgba(16, 185, 129, 0.12);
-  color: #10b981;
+  color: var(--worker);
   border-color: rgba(16, 185, 129, 0.3);
 }
 
 .config-status-badge.invalid {
   background: rgba(239, 68, 68, 0.12);
-  color: #ef4444;
+  color: var(--danger);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
@@ -343,11 +354,8 @@ p.subtitle {
 }
 
 .bit-hint {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* --- Worker Segments Section --- */
@@ -399,9 +407,9 @@ p.subtitle {
 }
 
 .btn-add-segment:hover {
-  background: var(--time);
+  background: var(--bit-time);
   color: #ffffff;
-  border-color: var(--time);
+  border-color: var(--bit-time);
 }
 
 .worker-segments-list {
@@ -453,7 +461,7 @@ p.subtitle {
 .segment-unit {
   position: absolute;
   right: 0.5rem;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-muted);
   pointer-events: none;
@@ -475,7 +483,7 @@ p.subtitle {
 }
 
 .btn-remove-segment:hover:not(:disabled) {
-  color: #ef4444;
+  color: var(--danger);
   background: rgba(239, 68, 68, 0.1);
 }
 
@@ -488,6 +496,7 @@ p.subtitle {
   display: flex;
   height: 8px;
   width: 100%;
+  margin-bottom: 1rem;
   border-radius: 999px;
   overflow: hidden;
   background: var(--input-border);
@@ -499,10 +508,9 @@ p.subtitle {
   transition: width 0.3s ease;
 }
 
-.bar-segment.sign { background-color: var(--sign); }
-.bar-segment.time { background-color: var(--time); }
-.bar-segment.worker { background-color: var(--worker); }
-.bar-segment.seq { background-color: var(--seq); }
+.bar-segment.sign { background-color: var(--bit-sign); }
+.bar-segment.time { background-color: var(--bit-time); }
+.bar-segment.seq { background-color: var(--bit-seq); }
 .bar-segment.unused { background-color: #94a3b8; opacity: 0.3; }
 
 .bit.unused {
@@ -570,9 +578,9 @@ p.subtitle {
 }
 
 .preset-btn.active {
-  background: var(--time);
+  background: var(--bit-time);
   color: #ffffff;
-  border-color: var(--time);
+  border-color: var(--bit-time);
 }
 
 .now-btn {
@@ -591,9 +599,9 @@ p.subtitle {
 }
 
 .now-btn:hover {
-  background: var(--time);
+  background: var(--bit-time);
   color: #ffffff;
-  border-color: var(--time);
+  border-color: var(--bit-time);
 }
 
 .now-btn:active {
@@ -669,8 +677,8 @@ input[type="range"] {
   appearance: none;
   width: 100%;
   height: 8px;
-  background: var(--vis-bg);
-  border: 1px solid var(--input-border);
+  background: linear-gradient(to right, var(--thumb-color, var(--time)) var(--fill, 0%), var(--input-border) var(--fill, 0%));
+  border: none;
   border-radius: 999px;
   outline: none;
   padding: 0;
@@ -713,6 +721,20 @@ input[type="range"]:active::-moz-range-thumb {
   transform: scale(1.2);
 }
 
+input[type="range"]:focus-visible {
+  outline: 2px solid var(--time);
+  outline-offset: 6px;
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.35);
+}
+
+:focus-visible {
+  outline: 2px solid var(--time);
+  outline-offset: 2px;
+}
+
 .visualization { 
   margin-bottom: 2rem; 
   background: var(--vis-bg); 
@@ -744,10 +766,9 @@ input[type="range"]:active::-moz-range-thumb {
 }
 
 /* Colors based on sections */
-.bit.sign { background-color: var(--sign); }
-.bit.time { background-color: var(--time); }
-.bit.worker { background-color: var(--worker); }
-.bit.seq { background-color: var(--seq); }
+.bit.sign { background-color: var(--bit-sign); }
+.bit.time { background-color: var(--bit-time); }
+.bit.seq { background-color: var(--bit-seq); }
 
 /* Effect when value changes */
 .bit.highlight { 
@@ -784,6 +805,7 @@ input[type="range"]:active::-moz-range-thumb {
   border: 2px dashed var(--panel-border); 
   border-radius: 8px; 
   padding: 1.25rem 1.5rem; 
+  margin-bottom: 2rem;
   text-align: center; 
   transition: background-color 0.25s ease, border-color 0.25s ease;
 }
@@ -844,7 +866,7 @@ input[type="range"]:active::-moz-range-thumb {
   border: 1px solid transparent;
   border-radius: 8px;
   padding: 0.25rem 0.5rem;
-  font-size: 2rem; 
+  font-size: clamp(1.1rem, 5vw, 2rem); 
   font-weight: 700; 
   color: var(--time); 
   font-family: monospace; 
@@ -867,6 +889,17 @@ input[type="range"]:active::-moz-range-thumb {
   margin-top: 0.25rem;
   font-size: 0.78rem;
   color: var(--text-muted);
+}
+
+.result-status {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--danger);
+}
+
+.result-status:not(:empty) {
+  margin-top: 0.5rem;
 }
 
 @media (max-width: 768px) {
@@ -908,6 +941,11 @@ input[type="range"]:active::-moz-range-thumb {
   .bit-inputs-grid {
     grid-template-columns: 1fr;
   }
+  .result-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
   .worker-segment-row {
     grid-template-columns: auto 1fr auto;
     row-gap: 0.5rem;
@@ -920,4 +958,16 @@ input[type="range"]:active::-moz-range-thumb {
 input:disabled, button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+  }
+
+  .bit.highlight,
+  .now-btn:active,
+  .action-btn:active {
+    transform: none;
+  }
 }

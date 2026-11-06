@@ -16,9 +16,11 @@
   "author": "Gabriel Rufino",
   "scripts": {
     "start": "serve .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.0",
     "serve": "^14.2.6",
     "vitest": "^4.1.11"
   }

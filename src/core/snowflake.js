@@ -10,8 +10,12 @@ export function calculateLimits(tsBits, seqBits, workerSegments) {
   const safeSeqBits = Math.max(0, Math.min(32, parseInt(seqBits, 10) || 0));
 
   let workerTotalBits = 0;
+  const usedColors = new Set(workerSegments.map(seg => seg.color).filter(Boolean));
   workerSegments.forEach((seg, idx) => {
-    seg.color = WORKER_PALETTE[idx % WORKER_PALETTE.length];
+    if (!seg.color) {
+      seg.color = WORKER_PALETTE.find(color => !usedColors.has(color)) ?? WORKER_PALETTE[idx % WORKER_PALETTE.length];
+      usedColors.add(seg.color);
+    }
     workerTotalBits += seg.bits;
   });
 
