@@ -10,8 +10,12 @@ export function calculateLimits(tsBits, seqBits, workerSegments) {
   const safeSeqBits = Math.max(0, Math.min(32, parseInt(seqBits, 10) || 0));
 
   let workerTotalBits = 0;
+  const usedColors = new Set(workerSegments.map(seg => seg.color).filter(Boolean));
   workerSegments.forEach((seg, idx) => {
-    seg.color = WORKER_PALETTE[idx % WORKER_PALETTE.length];
+    if (!seg.color) {
+      seg.color = WORKER_PALETTE.find(color => !usedColors.has(color)) ?? WORKER_PALETTE[idx % WORKER_PALETTE.length];
+      usedColors.add(seg.color);
+    }
     workerTotalBits += seg.bits;
   });
 
@@ -64,6 +68,32 @@ export function decodeSnowflake({ id, limits, workerSegments }) {
   });
 
   const seq = id & limits.maxSeq;
+
+  return { ts, seq };
+}
+
+/**
+ * Randomizes the snowflake components (timestamp, worker segments, and sequence)
+ * based on the limits.
+ */
+export function randomizeSnowflake({ limits, workerSegments }) {
+  // Generate random BigInts within bounds
+  const randomBigInt = (maxVal) => {
+    if (maxVal === 0n) return 0n;
+    // Each call produces 32 uniformly distributed integer bits. Two calls give us 64 bits,
+    // covering the full range of snowflake component values.
+    const high = BigInt(Math.floor(Math.random() * 0x100000000));
+    const low = BigInt(Math.floor(Math.random() * 0x100000000));
+    const random64 = (high << 32n) | low;
+    return random64 % (maxVal + 1n);
+  };
+
+  const ts = randomBigInt(limits.maxTs);
+  const seq = randomBigInt(limits.maxSeq);
+
+  workerSegments.forEach(seg => {
+    seg.value = randomBigInt(seg.mask);
+  });
 
   return { ts, seq };
 }

@@ -31,7 +31,7 @@
           </svg>
         </a>
         <div class="theme-switcher" role="radiogroup" aria-label="Theme selection">
-          <button type="button" class="theme-btn" data-theme-value="light" title="Light mode" aria-label="Light mode">
+          <button type="button" role="radio" class="theme-btn" data-theme-value="light" title="Light mode" aria-label="Light mode">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="5"></circle>
               <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -44,12 +44,12 @@
               <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
           </button>
-          <button type="button" class="theme-btn" data-theme-value="dark" title="Dark mode" aria-label="Dark mode">
+          <button type="button" role="radio" class="theme-btn" data-theme-value="dark" title="Dark mode" aria-label="Dark mode">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
           </button>
-          <button type="button" class="theme-btn" data-theme-value="system" title="System mode" aria-label="System mode">
+          <button type="button" role="radio" class="theme-btn" data-theme-value="system" title="System mode" aria-label="System mode">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
               <line x1="8" y1="21" x2="16" y2="21"></line>
@@ -130,9 +130,6 @@
           </button>
         </div>
 
-        <div class="bit-allocation-bar" id="bit-allocation-bar" title="Visual allocation of 64 bits">
-          <!-- Dynamically populated via JS -->
-        </div>
       </div>
     </div>
     
@@ -144,9 +141,9 @@
           <div class="label-row">
             <label for="epoch">Epoch (Initial Date)</label>
             <div class="epoch-presets" role="group" aria-label="Epoch presets">
-              <button type="button" class="preset-btn active" data-date="2010-11-04">Twitter</button>
-              <button type="button" class="preset-btn" data-date="2015-01-01">Discord</button>
-              <button type="button" class="preset-btn" data-date="1970-01-01">Unix</button>
+              <button type="button" class="preset-btn active" data-date="2010-11-04" aria-pressed="true">Twitter</button>
+              <button type="button" class="preset-btn" data-date="2015-01-01" aria-pressed="false">Discord</button>
+              <button type="button" class="preset-btn" data-date="1970-01-01" aria-pressed="false">Unix</button>
             </div>
           </div>
           <input type="date" id="epoch" value="2010-11-04">
@@ -190,7 +187,42 @@
       </div>
     </div>
 
+    <div class="result-panel">
+      <div class="result-header">
+        <label for="final-id" class="result-label">Generated Final ID (Decimal)</label>
+        <div class="result-actions">
+          <button type="button" id="btn-randomize" class="action-btn" title="Randomize ID">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 3h5v5"></path>
+              <path d="M4 20L21 3"></path>
+              <path d="M21 16v5h-5"></path>
+              <path d="M15 15l6 6"></path>
+              <path d="M4 4l5 5"></path>
+            </svg>
+            <span>Randomize</span>
+          </button>
+          <button type="button" id="btn-copy" class="action-btn" title="Copy to clipboard">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="copy-text" aria-live="polite">Copy</span>
+          </button>
+        </div>
+      </div>
+      <div class="final-id-container">
+        <input type="text" id="final-id" class="final-id-input" inputmode="numeric" placeholder="0" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="decode-hint">
+        <span>💡 Edit or paste any decimal ID above to decode it in real time</span>
+      </div>
+      <p class="result-status" id="result-status" role="status"></p>
+    </div>
+
     <div class="visualization">
+      <div class="bit-allocation-bar" id="bit-allocation-bar" title="Visual allocation of 64 bits">
+        <!-- Dynamically populated via JS -->
+      </div>
       <div class="bits-grid" id="bits-container">
         <!-- Bits are rendered via JS -->
       </div>
@@ -200,24 +232,6 @@
       </div>
     </div>
 
-    <div class="result-panel">
-      <div class="result-header">
-        <label for="final-id" class="result-label">Generated Final ID (Decimal)</label>
-        <button type="button" id="btn-copy" class="copy-btn" title="Copy to clipboard">
-          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          <span id="copy-text">Copy</span>
-        </button>
-      </div>
-      <div class="final-id-container">
-        <input type="text" id="final-id" class="final-id-input" inputmode="numeric" placeholder="0" spellcheck="false" autocomplete="off">
-      </div>
-      <div class="decode-hint">
-        <span>💡 Edit or paste any decimal ID above to decode it in real time</span>
-      </div>
-    </div>
   </div>
 
   <script type="module" src="src/script.js"></script>

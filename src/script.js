@@ -1,6 +1,6 @@
 import { initTheme } from './state/theme.js';
 import { formatTimestampDate, getEpochMs, formatEpochPreview, formatLifespan } from './utils/formatters.js';
-import { calculateLimits, encodeSnowflake, decodeSnowflake } from './core/snowflake.js';
+import { calculateLimits, encodeSnowflake, decodeSnowflake, randomizeSnowflake } from './core/snowflake.js';
 import { syncURLParams, loadFromURLParams } from './state/url.js';
 import {
   initBitGrid,
@@ -9,7 +9,8 @@ import {
   renderAllocationBar,
   renderLegend,
   renderWorkerSegmentsManager,
-  renderSliders
+  renderSliders,
+  updateRangeFill
 } from './ui/visualizer.js';
 
 // Initialize Theme
@@ -54,7 +55,9 @@ const slidersContainer = document.getElementById('sliders-container');
 const bitsContainer = document.getElementById('bits-container');
 const legendContainer = document.getElementById('legend-container');
 
+const resultStatusEl = document.getElementById('result-status');
 const finalIdInput = document.getElementById('final-id');
+const btnRandomize = document.getElementById('btn-randomize');
 const btnCopy = document.getElementById('btn-copy');
 const copyText = document.getElementById('copy-text');
 
@@ -72,7 +75,9 @@ function updateEpochPreview() {
   }
   const currentDateStr = epochInput.value.trim();
   epochPresetButtons.forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.date === currentDateStr);
+    const isActive = btn.dataset.date === currentDateStr;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', isActive.toString());
   });
 }
 
@@ -105,8 +110,14 @@ function updateBitStructureUI() {
     if (btnNow) btnNow.disabled = !isValid;
     if (finalIdInput) finalIdInput.disabled = !isValid;
     if (btnCopy) btnCopy.disabled = !isValid;
+    if (btnRandomize) btnRandomize.disabled = !isValid;
     if (epochInput) epochInput.disabled = !isValid;
     epochPresetButtons.forEach(btn => btn.disabled = !isValid);
+  }
+
+  if (resultStatusEl) {
+    const message = totalBits === 64 ? '' : `Bits add up to ${totalBits} of 64. Adjust the layout to generate an ID.`;
+    if (resultStatusEl.textContent !== message) resultStatusEl.textContent = message;
   }
 
   renderAllocationBar(barAllocationEl, limits, workerSegments);
@@ -172,6 +183,7 @@ function updateSimulator() {
     const slider = document.getElementById(`slider-${seg.id}`);
     if (badge) badge.textContent = seg.value.toString();
     if (slider && document.activeElement !== slider) slider.value = seg.value.toString();
+    updateRangeFill(slider);
   });
 
   if (seqValue > maxSeq) seqValue = maxSeq;
@@ -180,6 +192,7 @@ function updateSimulator() {
   const seqSlider = document.getElementById('sequence');
   if (seqBadge) seqBadge.textContent = seqValue.toString();
   if (seqSlider && document.activeElement !== seqSlider) seqSlider.value = seqValue.toString();
+  updateRangeFill(seqSlider);
 
   if (readableDateEl) readableDateEl.textContent = formatTimestampDate(epoch + ts);
 
@@ -291,6 +304,20 @@ if (btnNow) {
     const { maxTs } = getLimits();
     if (offset > maxTs) offset = maxTs;
     tsInput.value = offset.toString();
+    updateSimulator();
+  });
+}
+
+if (btnRandomize) {
+  btnRandomize.addEventListener('click', () => {
+    const limits = getLimits();
+    const result = randomizeSnowflake({ limits, workerSegments });
+
+    tsInput.value = result.ts.toString();
+    seqValue = result.seq;
+
+    // We need to re-render the sliders since seqValue and workerSegments values have changed
+    renderSlidersComponent();
     updateSimulator();
   });
 }

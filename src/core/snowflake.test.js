@@ -1,5 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import { calculateLimits, encodeSnowflake, decodeSnowflake } from './snowflake.js';
+import { afterEach, describe, it, expect } from 'vitest';
+import { vi } from 'vitest';
+import { calculateLimits, encodeSnowflake, decodeSnowflake, randomizeSnowflake } from './snowflake.js';
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 /**
  * Helper: creates a minimal worker segment for testing.
@@ -80,6 +85,35 @@ describe('calculateLimits', () => {
     const limits = calculateLimits(41, 12, workers);
     expect(limits.workerTotalBits).toBe(0);
     expect(workers[0].mask).toBe(0n);
+  });
+});
+
+describe('randomizeSnowflake', () => {
+  it('should randomize ts, seq, and worker segment values within their limits', () => {
+    const workers = [makeSegment('A', 5), makeSegment('B', 10)];
+    const limits = calculateLimits(41, 12, workers);
+
+    // We mock Math.random so that high & low are predictable
+    // First random gives high, second gives low
+
+    vi.spyOn(Math, 'random').mockReturnValue(0.9999999999);
+
+    const result = randomizeSnowflake({ limits, workerSegments: workers });
+
+    expect(result.ts).toBe(limits.maxTs);
+    expect(result.seq).toBe(limits.maxSeq);
+    expect(workers[0].value).toBe(workers[0].mask);
+    expect(workers[1].value).toBe(workers[1].mask);
+  });
+
+  it('should handle maxVal of 0 gracefully', () => {
+    const workers = [makeSegment('A', 0)];
+    const limits = calculateLimits(41, 0, workers);
+
+    const result = randomizeSnowflake({ limits, workerSegments: workers });
+
+    expect(result.seq).toBe(0n);
+    expect(workers[0].value).toBe(0n);
   });
 });
 

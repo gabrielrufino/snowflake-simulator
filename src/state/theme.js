@@ -2,7 +2,8 @@
 const systemMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
 export function getSavedTheme() {
-  return localStorage.getItem('snowflake_theme') || 'system';
+  const theme = localStorage.getItem('snowflake_theme');
+  return ['light', 'dark', 'system'].includes(theme) ? theme : 'system';
 }
 
 export function applyTheme(theme) {
@@ -16,6 +17,7 @@ export function applyTheme(theme) {
     const isActive = btn.dataset.themeValue === theme;
     btn.classList.toggle('active', isActive);
     btn.setAttribute('aria-checked', isActive.toString());
+    btn.tabIndex = isActive ? 0 : -1;
   });
 }
 
@@ -25,10 +27,19 @@ export function setTheme(theme) {
 }
 
 export function initTheme() {
-  const themeButtons = document.querySelectorAll('.theme-btn');
+  const themeButtons = [...document.querySelectorAll('.theme-btn')];
+  const steps = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
   themeButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       setTheme(btn.dataset.themeValue);
+    });
+    btn.addEventListener('keydown', (e) => {
+      const step = steps[e.key];
+      if (!step) return;
+      e.preventDefault();
+      const next = themeButtons[(themeButtons.indexOf(btn) + step + themeButtons.length) % themeButtons.length];
+      next.focus();
+      setTheme(next.dataset.themeValue);
     });
   });
 

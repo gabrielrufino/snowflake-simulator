@@ -1,11 +1,13 @@
 // --- Worker Color Palette ---
+// Every entry keeps at least 4.5:1 contrast against white text.
+// Adjacent entries are spread across hues so neighboring segments stay distinguishable.
 export const WORKER_PALETTE = [
-  '#10b981', // emerald
-  '#14b8a6', // teal
-  '#06b6d4', // cyan
-  '#8b5cf6', // violet
-  '#ec4899', // pink
-  '#f97316', // orange
-  '#6366f1', // indigo
-  '#84cc16'  // lime
+  '#047857', // emerald
+  '#6d28d9', // violet
+  '#c2410c', // orange
+  '#0e7490', // cyan
+  '#be185d', // pink
+  '#4d7c0f', // lime
+  '#0f766e', // teal
+  '#4338ca'  // indigo
 ];
