@@ -161,13 +161,13 @@ export function renderLegend(legendContainer, limits, workerSegments) {
   // Sign
   const signItem = document.createElement('div');
   signItem.className = 'legend-item';
-  signItem.innerHTML = `<div class="dot" style="background: var(--sign)"></div>Sign (1 bit)`;
+  signItem.innerHTML = `<div class="dot" style="background: var(--bit-sign)"></div>Sign (1 bit)`;
   legendContainer.appendChild(signItem);
 
   // Timestamp
   const tsItem = document.createElement('div');
   tsItem.className = 'legend-item';
-  tsItem.innerHTML = `<div class="dot" style="background: var(--time)"></div>Timestamp (${tsBits} bit${tsBits !== 1 ? 's' : ''})`;
+  tsItem.innerHTML = `<div class="dot" style="background: var(--bit-time)"></div>Timestamp (${tsBits} bit${tsBits !== 1 ? 's' : ''})`;
   legendContainer.appendChild(tsItem);
 
   // Worker Segments
@@ -181,7 +181,7 @@ export function renderLegend(legendContainer, limits, workerSegments) {
   // Sequence
   const seqItem = document.createElement('div');
   seqItem.className = 'legend-item';
-  seqItem.innerHTML = `<div class="dot" style="background: var(--seq)"></div>Sequence (${seqBits} bit${seqBits !== 1 ? 's' : ''})`;
+  seqItem.innerHTML = `<div class="dot" style="background: var(--bit-seq)"></div>Sequence (${seqBits} bit${seqBits !== 1 ? 's' : ''})`;
   legendContainer.appendChild(seqItem);
 }
 
@@ -194,8 +194,7 @@ export function renderWorkerSegmentsManager(container, workerSegments, callbacks
   const canRemove = workerSegments.length > 1;
 
   workerSegments.forEach((seg, idx) => {
-    const color = WORKER_PALETTE[idx % WORKER_PALETTE.length];
-    seg.color = color;
+    const color = seg.color || WORKER_PALETTE[idx % WORKER_PALETTE.length];
 
     const row = document.createElement('div');
     row.className = 'worker-segment-row';
@@ -263,18 +262,20 @@ export function renderSliders(container, limits, workerSegments, seqValue, callb
     group.innerHTML = `
       <div class="label-row">
         <label for="slider-${seg.id}">${seg.name} (max ${maxVal.toLocaleString()})</label>
-        <span class="value-badge" style="color: ${seg.color};" id="badge-${seg.id}">${seg.value.toString()}</span>
+        <span class="value-badge" style="background-color: ${seg.color}; border-color: ${seg.color}; color: #ffffff;" id="badge-${seg.id}">${seg.value.toString()}</span>
       </div>
       <input type="range" id="slider-${seg.id}" min="0" max="${maxVal.toString()}" value="${seg.value.toString()}" style="--thumb-color: ${seg.color}; accent-color: ${seg.color};">
     `;
 
     const rangeInput = group.querySelector('input[type="range"]');
     const badgeEl = group.querySelector(`#badge-${seg.id}`);
+    updateRangeFill(rangeInput);
 
     rangeInput.addEventListener('input', (e) => {
       const val = BigInt(e.target.value || 0);
       seg.value = val;
       if (badgeEl) badgeEl.textContent = val.toString();
+      updateRangeFill(e.target);
       if (callbacks.onWorkerChange) callbacks.onWorkerChange(seg, val);
     });
 
@@ -298,12 +299,25 @@ export function renderSliders(container, limits, workerSegments, seqValue, callb
 
   const seqRangeInput = seqGroup.querySelector('#sequence');
   const seqValEl = seqGroup.querySelector('#sequence-value');
+  updateRangeFill(seqRangeInput);
 
   seqRangeInput.addEventListener('input', (e) => {
     const val = BigInt(e.target.value || 0);
     if (seqValEl) seqValEl.textContent = val.toString();
+    updateRangeFill(e.target);
     if (callbacks.onSeqChange) callbacks.onSeqChange(val);
   });
 
   container.appendChild(seqGroup);
+}
+
+/**
+ * Syncs the filled portion of a range track with its current value.
+ */
+export function updateRangeFill(input) {
+  if (!input) return;
+  const min = Number(input.min) || 0;
+  const max = Number(input.max) || 0;
+  const percent = max > min ? ((Number(input.value) - min) / (max - min)) * 100 : 0;
+  input.style.setProperty('--fill', `${percent}%`);
 }
