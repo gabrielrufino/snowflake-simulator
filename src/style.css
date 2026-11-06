@@ -795,6 +795,11 @@ input[type="range"]:active::-moz-range-thumb {
   margin-bottom: 0.25rem;
 }
 
+.result-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .result-label { 
   font-size: 0.875rem; 
   color: var(--text-muted); 
@@ -803,7 +808,7 @@ input[type="range"]:active::-moz-range-thumb {
   font-weight: 600; 
 }
 
-.copy-btn {
+.action-btn {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -818,12 +823,12 @@ input[type="range"]:active::-moz-range-thumb {
   transition: all 0.2s ease;
 }
 
-.copy-btn:hover {
+.action-btn:hover {
   color: var(--text);
   border-color: var(--time);
 }
 
-.copy-btn:active {
+.action-btn:active {
   transform: scale(0.95);
 }
 
