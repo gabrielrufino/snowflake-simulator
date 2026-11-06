@@ -2,7 +2,8 @@
 const systemMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
 export function getSavedTheme() {
-  return localStorage.getItem('snowflake_theme') || 'system';
+  const theme = localStorage.getItem('snowflake_theme');
+  return ['light', 'dark', 'system'].includes(theme) ? theme : 'system';
 }
 
 export function applyTheme(theme) {
