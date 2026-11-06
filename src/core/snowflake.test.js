@@ -1,6 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, describe, it, expect } from 'vitest';
 import { vi } from 'vitest';
 import { calculateLimits, encodeSnowflake, decodeSnowflake, randomizeSnowflake } from './snowflake.js';
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 /**
  * Helper: creates a minimal worker segment for testing.
@@ -112,8 +116,6 @@ describe('randomizeSnowflake', () => {
     // Since random64 % (max + 1) -> we know it won't exceed max. We also test for lower bound.
     expect(result.ts).toBeGreaterThanOrEqual(0n);
     expect(result.seq).toBeGreaterThanOrEqual(0n);
-
-    randomSpy.mockRestore();
   });
 
   it('should handle maxVal of 0 gracefully', () => {
